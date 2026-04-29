@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="./seabunny.css?v=1.0.1" type="text/css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.75, minimum-scale=0.75">
+    <link rel="icon" href="./assets/bunny.png">
+    <meta property="og:title" content="sea bunnies :)">
+    <meta property="og:description" content="a little idle game about sea bunnies">
+    <meta property="og:type" content="website">
+    <meta name="og:image" itemprop="image" content="https://gdcolon.com/seabunny/assets/bunny.png">
+    <meta name="theme-color" id="customCol" content="#ffffff">
+    <meta name="twitter:card" content="summary">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135255146-1"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'UA-135255146-1');</script>
+    <title>sea bunnies :)</title>
+</head>
+<body>
+    <div id="game_box">
+
+        <div id="loading" class="oldCenter noHit">
+            <img src="./assets/bunny_sleep.png">
+            <h2>Loading...</h2>
+        </div>
+
+        <div id="coin_counter" class="unloaded noHit">
+            <img src="./assets/coin.png">
+            <h2 id="coins">0</h2>
+        </div>
+
+        <div id="top_right" class="unloaded">
+
+            <div class="smallButtons flexCenter">
+                <button id="credits_button" class="flexCenter">
+                    <img src="./icons/help.svg">
+                </button>
+
+                <button id="mute_button" class="flexCenter">
+                    <img id="mute_icon" src="./icons/vol_on.svg">
+                </button>
+            </div>
+
+            <button id="buy_button" class="flexCenter">
+                <img src="./icons/plus.svg" class="buy_plus">
+                <img src="./assets/bunny.png">
+                <span class="flexCenter"><img class="icon" src="./assets/coin.png"><p id="buy_price"></p></span>
+            </button>
+        </div>
+
+        <div id="credits_container" class="popupbox" style="display: none">
+            <div class="oldCenter popupcontainer">
+
+                <p style="position: absolute; opacity: 0%">&nbsp;</p> <!-- stops doubleclick from selecting -->
+
+                <h3>Credits</h3>
+                <p>Created by <a href="https://gdcolon.com" target="_blank">Colon</a> :</p>
+                <p>Art, BG, and animations by <a href="https://twitter.com/Nillie_VBF" target="_blank">Avie</a></p>
+                <p>Bunny design belongs to <a href="https://twitter.com/LoafeeBuns" target="_blank">Loafee</a></p>
+                <p>Playtested by <a href="https://twitter.com/NetBa_Art" target="_blank">NetBa</a> and <a href="https://twitter.com/Morphious86" target="_blank">Morph</a></p>
+                <p>Powered by <a href="https://pixijs.com/" target="_blank">PixiJS</a></p>
+                <p class="small">Happy birthday Loafee!</p>
+
+                <div id="settings_menu">
+                    <div class="setting">
+                        <label class="slider"><input checked type="checkbox" setting="noWaterShader" onchange="toggleSetting(this)"><span class="sliderspan"></span></label>
+                        <p class="smol">Water shader</p>
+                    </div>
+    
+                    <div class="setting">
+                        <label class="slider"><input checked type="checkbox" setting="noCursorTrail" onchange="toggleSetting(this)"><span class="sliderspan"></span></label>
+                        <p class="smol">Cursor trail</p>
+                    </div>
+                </div>
+
+                <p class="small" id="reset_everything">Clear all data</p>
+                <p class="small" id="version_number"></p>
+            </div>
+        </div>
+
+        <div id="reset_container" class="popupbox" style="display: none">
+            <div class="oldCenter popupcontainer">
+                <h3>Clear all data?</h3>
+                <p>Are you sure you want to clear <b>all save data?</b></p>
+                <p style="line-height: unset;">ALL your progress will be lost, and you will<br>start the game over from scratch.</p>
+
+                <div class="flexCenter" style="margin-top: 20px">
+                    <button class="redButton" style="margin-right: 30px" id="confirm_reset">Confirm</button>
+                    <button class="greenButton" onclick="hideCredits()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="upgrade_menu" style="display: none">
+            <div id="upgrade_box">
+            <div id="upgrade_photo_border" class="flexCenter">
+                <div id="upgrade_photo" class="flexCenter">
+                    <img id="upgrade_image_data">
+                </div>
+            </div>
+
+            <input type="text" maxlength="64" autocomplete="off" id="upgrade_name" placeholder="Name">
+            <p id="coin_info"><span id="coin_range"></span> <img class="icon" src="./assets/coin.png"> / <span id="coin_time"></span></p>
+            <p class="small"><img class="icon" src="./assets/coin.png"> Total: <span id="coin_total"></span></p>
+
+            <hr style="margin-top: 12px">
+
+            <div id="upgrade_list" style="margin-top: 5px; flex-direction: column;" class="flexCenter">
+                <div class="upgrade_stats">
+                    <img src="./icons/upg_max.svg" class="icon" title="Maximum coins">
+                    <div class="upgrade_squares flexCenter" statName="max"></div>
+                </div>
+
+                <div class="upgrade_stats">
+                    <img src="./icons/upg_min.svg" class="icon" title="Minimum coins">
+                    <div class="upgrade_squares flexCenter" statName="min"></div>
+                </div>
+
+                <div class="upgrade_stats">
+                    <img src="./icons/upg_time.svg" class="icon" title="Time to earn coins">
+                    <div class="upgrade_squares flexCenter" statName="time"></div>
+                </div>
+                
+                <div class="upgrade_stats">
+                    <img src="./icons/upg_sleep.svg" class="icon" title="Time awake">
+                    <div class="upgrade_squares flexCenter" statName="sleep"></div>
+                </div>
+            </div>
+
+            <button id="upgrade_button"><img class="icon" src="./icons/upgrade.svg"> 
+                <span id="upgrade_text">Upgrade!</span><span id="upgrade_text_5" style="display: none">Upgrade x5</span><br>
+                <span class="med" id="upgrade_unmaxxed"><img class="icon" src="./assets/coin.png">
+                    <span id="upgrade_price"></span>
+                    <span id="upgrade_price_5" style="display: none"></span>
+                </span>
+                <span class="med" id="upgrade_maxxed" style="display: none">MAX!</span>
+            </button>
+            <p class="nomobile" style="font-size: 10px; opacity: 66%; user-select: none;">SHIFT to upgrade 5 times</p>
+
+            <hr class="nomobile" style="margin-top: 8px">
+            <hr class="yesmobile" style="margin-top: 14px">
+
+            <div id="trait_container" class="flexCenter">
+                <h3><img class="icon" src="./icons/star.svg"> <span id="trait_name"></span></h3>
+                <p class="smol" id="trait_desc"></p>
+            </div>
+
+            <div id="upgrade_special_buttons" class="flexCenter">
+                <button id="reroll_trait" class="greenButton">Reroll trait<br><img class="icon" src="./assets/coin.png"> <span id="reroll_trait_price">100</span></button>
+                <button id="reroll_colors" class="greenButton">Reroll colors<br><img class="icon" src="./assets/coin.png"> <span id="reroll_colors_price">200</span></button>
+            </div>
+
+            <div class="upgrade_footer" id="sleep_footer">
+                <button id="sell_button" class="redButton">Sell for <img class="icon" src="./assets/coin.png"><span id="sell_price"></span></button>
+                <p class="smol" id="sleep_remaining" style="margin-top: 12px"></span></p>
+                <p class="small" style="margin-top: 4px">(awake for <span id="sleep_total">2 hours</span>)</p>
+            </div>
+
+            <div class="upgrade_footer" id="sell_footer" style="display: none">
+                <p class="smol" id="sleep_remaining" style="white-space: nowrap; overflow: hidden; color: rgb(255, 180, 180)"></span>Are you sure you want to sell this<br>bunny for <img class="icon" src="./assets/coin.png"> <span id="sell_amount"></span>?</p>
+                <div class="flexCenter sell_options" style="margin-top: 10px">
+                    <button id="confirm_sell" class="redButton" style="margin-right: 10px">Sell :&#40;</button>
+                    <button id="cancel_sell" class="greenButton">Cancel</button>
+                </div>
+            </div>
+
+            <p style="user-select: none; position: absolute;"></p> <!-- stops doubleclick from selecting, somehow -->
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="./libraries/pixi-ease.js"></script>
+
+<script src="./js/seabunny_web.js?v=1.0.1"></script>
+<script src="./js/seabunny_creature.js?v=1.0.1"></script>
+<script type="module" src="./js/seabunny_game.js?v=1.0.1"></script>
+
+</html>
