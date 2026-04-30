@@ -447,11 +447,13 @@ function saveData(exit) {
     // if multiple tabs are open, prioritize most recent to prevent data loss
     let currentSession = exit ? null : localStorage.getItem("seabunny_session")
     if (currentSession && +currentSession > session) {
-        enableSaving = false;
-        gameBox.remove()
-        app.destroy()
-        creatures = []
-        return alert("You opened the game in a new tab! This tab has been deactivated to prevent conflicts.");
+        let confirmed = confirm("You opened the game in a new tab! Do you want to deactivate this tab to prevent conflicts?")
+        if (confirmed) {
+            enableSaving = false;
+            gameBox.remove()
+            app.destroy()
+            creatures = []
+        }
     }
 
     let saveData = {
